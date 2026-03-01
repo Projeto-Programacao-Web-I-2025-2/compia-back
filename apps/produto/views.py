@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 from .models import Categoria, Produto
 from .pagination import ProdutoPagination
@@ -23,7 +24,18 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         else:
             return ProdutoSerializer
 
-    @action(detail=False, methods=["get"], url_path="categorias")
+    @extend_schema(
+        summary="Lista todas as categorias",
+        responses=CategoriaSerializer(many=True),
+        tags=["produtos"],
+    )
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="categorias",
+        filterset_fields=[],
+        pagination_class=None
+    )
     def categorias(self, request):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
