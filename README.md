@@ -20,7 +20,7 @@ Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework p
 ## Instalação
 1. Clone o repositório:
 	```bash
-	git clone <url-do-repositorio>
+	git clone https://github.com/Projeto-Programacao-Web-I-2025-2/compia-back
 	cd compia-back
 	```
 2. Crie e ative um ambiente virtual:
