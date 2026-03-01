@@ -8,5 +8,8 @@ class PedidoAdmin(admin.ModelAdmin):
     list_filter = ("status", "data_pedido")
     search_fields = ("cliente__nome",)
 
+    def has_add_permission(self, request):
+        return False
+
 
 admin.site.register(Pedido, PedidoAdmin)
