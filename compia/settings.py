@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = [
     "apps.produto",
+    "apps.user",
 ]
 
 DJANGO_APPS = [
@@ -118,9 +119,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Recife'
 
 USE_I18N = True
 
@@ -138,6 +139,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -147,10 +151,61 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
+AUTH_USER_MODEL = "user.User"
+
 JAZZMIN_SETTINGS = {
-    "show_ui_builder": True,
+    "site_title": "Compia",
+    "site_header": "Compia",
+    "site_brand": "Compia",
+    "welcome_sign": "Bem-vindo ao painel de administração da Compia",
+    "copyright": "Compia",
+    "show_ui_builder": False,
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [
+        "auth",
+        "authtoken",
+    ],
+    "order_with_respect_to": [
+        "dashboard",
+        "user",
+        "produto",
+    ],
+    "icons" : {
+        "user.User": "fas fa-user",
+        "produto.Produto": "fas fa-book",
+        "produto.Categoria": "fas fa-tags",
+    }
 }
 
 JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": True,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
     "theme": "flatly",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
 }
