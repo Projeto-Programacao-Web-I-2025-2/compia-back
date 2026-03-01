@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Categoria, Produto
 from .pagination import ProdutoPagination
@@ -14,6 +15,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     filterset_fields = ["nome", "descricao", "idioma", "tipo_produto", "categorias"]
     ordering_fields = ["nome", "preco", "ano_lancamento", "tipo_produto"]
     pagination_class = ProdutoPagination
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action in ["list"]:
