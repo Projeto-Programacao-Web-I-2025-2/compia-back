@@ -58,5 +58,5 @@ compia-back/
 
 ## Documentação da API
 A documentação interativa da API está disponível após rodar o projeto em:
-- [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/) (Swagger UI)
-- [http://localhost:8000/api/schema/redoc/](http://localhost:8000/api/schema/redoc/) (ReDoc)
+- [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/) (Swagger UI)
+- [http://localhost:8000/api/schema/](http://localhost:8000/api/schema/) (OpenAPI)
