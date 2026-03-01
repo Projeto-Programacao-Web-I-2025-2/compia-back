@@ -2,18 +2,6 @@
 
 Plataforma de e-commerce para a editora COMPIA, especializada em materiais bibliográficos da área de Inteligência Artificial.
 
-## Índice
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Requisitos](#requisitos)
-- [Instalação](#instalacao)
-- [Como Rodar](#como-rodar)
-- [Testes](#testes)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Documentação da API](#documentacao-da-api)
-- [Contribuição](#contribuicao)
-- [Licença](#licenca)
-
 ## Sobre o Projeto
 Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework para gerenciar produtos e operações de e-commerce da editora COMPIA.
 
@@ -21,9 +9,8 @@ Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework p
 - Python 3.11+
 - Django 6.0.2
 - Django REST Framework
-- SQLite3 (padrão, pode ser alterado para outros bancos)
+- SQLite3
 - drf-spectacular (documentação OpenAPI)
-- django-jazzmin (admin customizado)
 
 ## Requisitos
 - Python 3.11 ou superior
@@ -70,5 +57,5 @@ compia-back/
 
 ## Documentação da API
 A documentação interativa da API está disponível após rodar o projeto em:
-- [http://localhost:8000/api/schema/swagger-ui/](http://localhost:8000/api/schema/swagger-ui/) (Swagger UI)
-- [http://localhost:8000/api/schema/redoc/](http://localhost:8000/api/schema/redoc/) (ReDoc)
+- [http://localhost:8000/api/docs/](http://localhost:8000/api/docs/) (Swagger UI)
+- [http://localhost:8000/api/schema/](http://localhost:8000/api/schema/) (OpenAPI)
