@@ -2,18 +2,6 @@
 
 Plataforma de e-commerce para a editora COMPIA, especializada em materiais bibliográficos da área de Inteligência Artificial.
 
-## Índice
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Requisitos](#requisitos)
-- [Instalação](#instalacao)
-- [Como Rodar](#como-rodar)
-- [Testes](#testes)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Documentação da API](#documentacao-da-api)
-- [Contribuição](#contribuicao)
-- [Licença](#licenca)
-
 ## Sobre o Projeto
 Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework para gerenciar produtos e operações de e-commerce da editora COMPIA.
 
