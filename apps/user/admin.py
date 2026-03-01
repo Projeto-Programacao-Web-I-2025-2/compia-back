@@ -7,18 +7,18 @@ class UserAdmin(BaseUserAdmin):
     model = User
     ordering = ("id", "nome")
     list_display = ("id", "nome", "email", "role",)
-    list_filter = ("is_staff",)
+    list_filter = ("role",)
     search_fields = ("nome", "email",)
 
     fieldsets = (
-        ("Informações", {"fields": ("nome", "email", "password", "imagem", "role")}),
+        ("Informações", {"fields": ("nome", "email", "password", "role")}),
         ("Permissões", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
     )
 
     add_fieldsets = (
         ("Informações", {
             "classes": ("wide",),
-            "fields": ("nome", "email", "password1", "password2", "imagem", "role"),
+            "fields": ("nome", "email", "password1", "password2", "role"),
         }),
         ("Permissões", {
             "fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions"),
