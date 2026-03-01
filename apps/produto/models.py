@@ -55,6 +55,7 @@ class Produto(models.Model):
         "Categoria",
         related_name="produtos",
         verbose_name="Categorias",
+        blank=True,
     )
     tipo_produto = models.CharField(
         max_length=20,
