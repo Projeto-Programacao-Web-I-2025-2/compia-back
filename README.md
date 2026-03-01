@@ -9,9 +9,8 @@ Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework p
 - Python 3.11+
 - Django 6.0.2
 - Django REST Framework
-- SQLite3 (padrão, pode ser alterado para outros bancos)
+- SQLite3
 - drf-spectacular (documentação OpenAPI)
-- django-jazzmin (admin customizado)
 
 ## Requisitos
 - Python 3.11 ou superior
