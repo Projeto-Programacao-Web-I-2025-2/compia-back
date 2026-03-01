@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 LOCAL_APPS = [
+    "apps.pedido",
     "apps.produto",
     "apps.user",
 ]
@@ -173,6 +174,7 @@ JAZZMIN_SETTINGS = {
     ],
     "icons" : {
         "user.User": "fas fa-user",
+        "pedido.Pedido": "fas fa-shopping-cart",
         "produto.Produto": "fas fa-book",
         "produto.Categoria": "fas fa-tags",
     }
