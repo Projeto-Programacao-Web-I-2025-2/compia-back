@@ -16,7 +16,12 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     filterset_fields = ["nome", "descricao", "idioma", "tipo_produto", "categorias"]
     ordering_fields = ["nome", "preco", "ano_lancamento", "tipo_produto"]
     pagination_class = ProdutoPagination
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return []
+        else:
+            return [IsAuthenticated()]
 
     def get_serializer_class(self):
         if self.action in ["list"]:
