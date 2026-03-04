@@ -1,13 +1,14 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
 from .models import Categoria, Produto
 from .pagination import ProdutoPagination
 from .schemas import produto_schema
 from .serializers import CategoriaSerializer, ProdutoSerializer, ProdutoListSerializer
+from apps.user.permissions import IsSellerUser
 
 
 @produto_schema
@@ -21,7 +22,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         else:
-            return [IsAuthenticated()]
+            return [IsSellerUser()]
 
     def get_serializer_class(self):
         if self.action in ["list"]:

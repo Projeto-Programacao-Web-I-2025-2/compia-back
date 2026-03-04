@@ -28,6 +28,12 @@ class Produto(models.Model):
         max_length=100,
         verbose_name="Produto",
     )
+    vendedor = models.ForeignKey(
+        "user.User",
+        on_delete=models.CASCADE,
+        related_name="produtos",
+        verbose_name="Vendedor",
+    )
     descricao = models.TextField(
         verbose_name="Descrição",
         null=False,
