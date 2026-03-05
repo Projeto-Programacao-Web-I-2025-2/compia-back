@@ -137,6 +137,13 @@ STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+DJOSER = {
+    "SERIALIZERS": {
+        "user_create": "apps.user.serializers.UserCreateSerializer",
+        "user": "apps.user.serializers.UserSerializer",
+    }
+}
+
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",

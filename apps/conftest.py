@@ -1,8 +1,7 @@
 import pytest
+from django.contrib.auth import get_user_model
 
-from model_bakery import baker
-
-from apps.user.models import User
+User = get_user_model()
 
 
 @pytest.fixture
@@ -12,12 +11,20 @@ def api_client():
 
 
 @pytest.fixture
-def client_user():
-    client = baker.make("user.User", email="client@email.com", password="client123", role=User.Role.CLIENTE)
-    return client
+def client_user(db):
+    return User.objects.create_user(
+        email="client@email.com",
+        password="client123",
+        nome="Cliente Teste",
+        role=User.Role.CLIENTE
+    )
 
 
 @pytest.fixture
-def seller_user():
-    seller = baker.make("user.User", email="seller@email.com", password="seller123", role=User.Role.VENDEDOR)
-    return seller
+def seller_user(db):
+    return User.objects.create_user(
+        email="seller@email.com",
+        password="seller123",
+        nome="Vendedor Teste",
+        role=User.Role.VENDEDOR
+    )
