@@ -24,7 +24,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         return Produto.objects.all()
 
     def get_permissions(self):
-        if self.action in ["list", "retrieve"]:
+        if self.action in ["list", "retrieve", "categorias"]:
             return [AllowAny()]
         else:
             return [IsSellerUser()]
