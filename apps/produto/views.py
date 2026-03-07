@@ -1,8 +1,10 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Categoria, Produto
 from .pagination import ProdutoPagination
@@ -13,10 +15,13 @@ from apps.user.permissions import IsSellerUser
 
 @produto_schema
 class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all()
     filterset_fields = ["nome", "descricao", "idioma", "tipo_produto", "categorias"]
     ordering_fields = ["nome", "preco", "ano_lancamento", "tipo_produto"]
     pagination_class = ProdutoPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+
+    def get_queryset(self):
+        return Produto.objects.all()
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:
