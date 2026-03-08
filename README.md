@@ -43,6 +43,12 @@ Este projeto é uma API RESTful desenvolvida em Django e Django REST Framework p
 	python manage.py runserver
 	```
 
+ ## Como testar
+ Na raiz do projeto, execute o comando:
+ ```bash
+	pytest
+```
+
 ## Estrutura do Projeto
 ```
 compia-back/
