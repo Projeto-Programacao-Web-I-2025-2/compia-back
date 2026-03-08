@@ -92,6 +92,52 @@ class TestProdutoViewSet:
         assert response.data["results"][0]["estoque"] is None
         assert response.data["results"][0]["arquivo"] is not None
 
+    def test_list_produtos_filter_by_tipo(self, api_client):
+        baker.make("produto.Livro", estoque=10, _quantity=2)
+        baker.make("produto.Ebook", arquivo="ebooks/teste.pdf", _quantity=3)
+
+        response = api_client.get("/api/produtos/?tipo=livro")
+
+        assert response.status_code == 200
+        assert response.data["count"] == 2
+        for result in response.data["results"]:
+            assert result["tipo"] == "livro"
+            assert result["estoque"] is not None
+            assert result["arquivo"] is None
+
+    def test_list_produtos_filter_by_language(self, api_client):
+        baker.make("produto.Livro", idioma="PT", estoque=10, _quantity=1)
+        baker.make("produto.Livro", idioma="EN", estoque=10, _quantity=1)
+        baker.make("produto.Ebook", idioma="PT", arquivo="ebooks/teste.pdf", _quantity=1)
+
+        response = api_client.get("/api/produtos/?idioma=PT")
+
+        assert response.status_code == 200
+        assert response.data["count"] == 2
+        for result in response.data["results"]:
+            assert result["idioma"] == "PT"
+
+    def test_list_produtos_filter_by_categoria(self, api_client):
+        categoria1 = baker.make("produto.Categoria")
+        categoria2 = baker.make("produto.Categoria")
+        livro1 = baker.make("produto.Livro", estoque=10)
+        livro2 = baker.make("produto.Livro", estoque=10)
+        ebook1 = baker.make("produto.Ebook", arquivo="ebooks/teste.pdf")
+        ebook2 = baker.make("produto.Ebook", arquivo="ebooks/teste.pdf")
+
+        livro1.categorias.add(categoria1)
+        livro2.categorias.add(categoria2)
+        ebook1.categorias.add(categoria1)
+        ebook2.categorias.add(categoria1)
+        ebook2.categorias.add(categoria2)
+
+        response = api_client.get(f"/api/produtos/?categorias={categoria1.id}")
+
+        assert response.status_code == 200
+        assert response.data["count"] == 3
+        for result in response.data["results"]:
+            assert categoria1.id in result["categorias"]
+
 
 @pytest.mark.django_db
 class TestLivroViewSet:

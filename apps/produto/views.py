@@ -34,7 +34,7 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(livro__isnull=False)
         elif tipo == "ebook":
             queryset = queryset.filter(ebook__isnull=False)
-        return queryset
+        return queryset.distinct()
 
     @extend_schema(
         summary="Lista todas as categorias",
