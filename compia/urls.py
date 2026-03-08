@@ -22,8 +22,10 @@ from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 apps_patterns = [
+    path("clientes/", include("apps.cliente.urls")),
     path("pedidos/", include("apps.pedido.urls")),
     path("produtos/", include("apps.produto.urls")),
+    path("vendedores/", include("apps.vendedor.urls")),
 ]
 
 urlpatterns = [

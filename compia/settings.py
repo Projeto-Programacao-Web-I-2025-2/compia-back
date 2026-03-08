@@ -32,9 +32,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 LOCAL_APPS = [
+    "apps.cliente",
     "apps.pedido",
     "apps.produto",
     "apps.user",
+    "apps.vendedor",
 ]
 
 DJANGO_APPS = [
@@ -143,13 +145,6 @@ STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-DJOSER = {
-    "SERIALIZERS": {
-        "user_create": "apps.user.serializers.UserCreateSerializer",
-        "user": "apps.user.serializers.UserSerializer",
-    }
-}
-
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -187,6 +182,8 @@ JAZZMIN_SETTINGS = {
     ],
     "icons" : {
         "user.User": "fas fa-user",
+        "cliente.Cliente": "fas fa-users",
+        "vendedor.Vendedor": "fas fa-store",
         "pedido.Pedido": "fas fa-shopping-cart",
         "produto.Produto": "fas fa-book",
         "produto.Categoria": "fas fa-tags",

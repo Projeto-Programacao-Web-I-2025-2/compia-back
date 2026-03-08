@@ -90,7 +90,7 @@ class TestClienteViewSet():
             },
         }
 
-        response = api_client.put("/api/clientes/me/", payload, format="json")
+        response = api_client.patch("/api/clientes/me/", payload, format="json")
 
         assert response.status_code == 200
         client_user.refresh_from_db()

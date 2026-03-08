@@ -1,23 +1,19 @@
 from rest_framework import serializers
 
-from .models import Cliente, Endereco
+from .models import Vendedor
+from apps.cliente.models import Endereco
+from apps.cliente.serializers import EnderecoSerializer
 from apps.user.models import User
 
 
-class EnderecoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Endereco
-        fields = ["rua", "numero", "complemento", "bairro", "cidade", "estado", "cep"]
-
-
-class ClienteCreateSerializer(serializers.ModelSerializer):
+class VendedorCreateSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
     endereco = EnderecoSerializer(required=False)
 
     class Meta:
-        model = Cliente
+        model = Vendedor
         fields = ["id", "nome", "email", "password", "endereco"]
 
     def create(self, validated_data):
@@ -28,21 +24,21 @@ class ClienteCreateSerializer(serializers.ModelSerializer):
             nome=nome,
             email=email,
             password=password,
-            role=User.Role.CLIENTE
+            role=User.Role.VENDEDOR
         )
         endereco_data = validated_data.pop("endereco", None)
         endereco = Endereco.objects.create(**endereco_data) if endereco_data else None
-        cliente = Cliente.objects.create(user=user, endereco=endereco, **validated_data)
-        return cliente
+        vendedor = Vendedor.objects.create(user=user, endereco=endereco, **validated_data)
+        return vendedor
 
 
-class ClienteSerializer(serializers.ModelSerializer):
+class VendedorSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(source="user.nome")
     email = serializers.EmailField(source="user.email")
     endereco = EnderecoSerializer(required=False)
 
     class Meta:
-        model = Cliente
+        model = Vendedor
         fields = ["id", "nome", "email", "endereco"]
 
     def update(self, instance, validated_data):
