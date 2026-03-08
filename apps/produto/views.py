@@ -1,39 +1,40 @@
-from rest_framework import viewsets, filters
+from rest_framework import mixins, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Categoria, Produto
+
+from .models import Categoria, Ebook, Livro, Produto
 from .pagination import ProdutoPagination
 from .schemas import produto_schema
-from .serializers import CategoriaSerializer, ProdutoSerializer, ProdutoListSerializer
+from .serializers import CategoriaSerializer, ProdutoSerializer, LivroSerializer, EbookSerializer
 from apps.user.permissions import IsSellerUser
 
 
 @produto_schema
-class ProdutoViewSet(viewsets.ModelViewSet):
-    filterset_fields = ["nome", "descricao", "idioma", "tipo_produto", "categorias"]
-    ordering_fields = ["nome", "preco", "ano_lancamento", "tipo_produto"]
+class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
+    filterset_fields = ["nome", "descricao", "idioma", "categorias"]
+    ordering_fields = ["nome", "preco", "ano_lancamento"]
     pagination_class = ProdutoPagination
+    serializer_class = ProdutoSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Produto.objects.all()
+        queryset = Produto.objects.all().filter(
+            Q(livro__estoque__gt=0) | Q(ebook__arquivo__isnull=False)
+        ).order_by("-preco")
 
-    def get_permissions(self):
-        if self.action in ["list", "retrieve", "categorias"]:
-            return [AllowAny()]
-        else:
-            return [IsSellerUser()]
-
-    def get_serializer_class(self):
-        if self.action in ["list"]:
-            return ProdutoListSerializer
-        else:
-            return ProdutoSerializer
+        tipo = self.request.query_params.get("tipo")
+        if tipo == "livro":
+            queryset = queryset.filter(livro__isnull=False)
+        elif tipo == "ebook":
+            queryset = queryset.filter(ebook__isnull=False)
+        return queryset
 
     @extend_schema(
         summary="Lista todas as categorias",
@@ -51,3 +52,25 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
         return Response(serializer.data)
+
+
+class LivroViewSet(
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
+    serializer_class = LivroSerializer
+    permission_classes = [IsSellerUser]
+    queryset = Livro.objects.all()
+
+
+class EbookViewSet(
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
+    serializer_class = EbookSerializer
+    permission_classes = [IsSellerUser]
+    queryset = Ebook.objects.all()

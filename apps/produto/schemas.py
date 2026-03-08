@@ -1,13 +1,23 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes
 
-from .serializers import ProdutoSerializer, ProdutoListSerializer
+from .serializers import ProdutoSerializer
 
 produto_schema = extend_schema_view(
     list=extend_schema(
         summary="Listar produtos",
         description="Retorna uma lista de produtos.",
-        responses={200: ProdutoListSerializer(many=True)},
+        responses={200: ProdutoSerializer(many=True)},
         tags=["produtos"],
+        parameters=[
+            OpenApiParameter(
+                name="tipo",
+                description="Filtra por tipo de produto: 'livro' ou 'ebook'.",
+                required=False,
+                type=OpenApiTypes.STR,
+                enum=["livro", "ebook"],
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
     ),
     retrieve=extend_schema(
         summary="Detalhar produto",

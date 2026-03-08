@@ -1,10 +1,26 @@
+import os
+import glob
 import pytest
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from apps.cliente.models import Cliente
 from apps.vendedor.models import Vendedor
 
 User = get_user_model()
+
+
+@pytest.fixture(autouse=True)
+def cleanup_media_files():
+    yield
+    media_path = os.path.join(settings.MEDIA_ROOT, "ebooks")
+    if os.path.exists(media_path):
+        for file_path in glob.glob(os.path.join(media_path, "*.pdf")):
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
 
 
 @pytest.fixture

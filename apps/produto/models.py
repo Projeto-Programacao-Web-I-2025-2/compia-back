@@ -14,11 +14,7 @@ class Categoria(models.Model):
 
 
 class Produto(models.Model):
-    class TipoProduto(models.TextChoices):
-        LIVRO = "LIVRO", "Livro"
-        EBOOK = "EBOOK", "E-book"
-
-    class Languagem(models.TextChoices):
+    class Linguagem(models.TextChoices):
         PORTUGUES = "PT", "Português"
         INGLES = "EN", "Inglês"
         ESPANHOL = "ES", "Espanhol"
@@ -29,7 +25,7 @@ class Produto(models.Model):
         verbose_name="Produto",
     )
     vendedor = models.ForeignKey(
-        "user.User",
+        "vendedor.Vendedor",
         on_delete=models.CASCADE,
         related_name="produtos",
         verbose_name="Vendedor",
@@ -63,13 +59,29 @@ class Produto(models.Model):
         verbose_name="Categorias",
         blank=True,
     )
-    tipo_produto = models.CharField(
-        max_length=20,
-        choices=TipoProduto.choices,
-        verbose_name="Tipo do produto",
-    )
     idioma = models.CharField(
         max_length=2,
-        choices=Languagem.choices,
+        choices=Linguagem.choices,
         verbose_name="Idioma",
     )
+
+
+class Livro(Produto):
+    estoque = models.IntegerField(
+        verbose_name="Estoque",
+    )
+
+    class Meta:
+        verbose_name = "Livro"
+        verbose_name_plural = "Livros"
+
+
+class Ebook(Produto):
+    arquivo = models.FileField(
+        upload_to='ebooks/',
+        verbose_name="Arquivo",
+    )
+
+    class Meta:
+        verbose_name = "E-book"
+        verbose_name_plural = "E-books"
