@@ -4,13 +4,8 @@ from .models import Cliente
 
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ("usuario_id", "user_nome", "user_email")
+    list_display = ("id", "user_nome", "user_email")
     search_fields = ("user__nome", "user__email")
-
-    def usuario_id(self, obj):
-        return obj.user.id
-    usuario_id.short_description = "ID do Usuário"
-    usuario_id.admin_order_field = "user__id"
 
     def user_nome(self, obj):
         return obj.user.nome

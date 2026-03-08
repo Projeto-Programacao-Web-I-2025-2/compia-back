@@ -40,6 +40,7 @@ class TestProdutoViewSet:
         assert response.data["results"][0]["arquivo"] is not None
 
     def test_retrieve_livro(self, api_client):
+        baker.make("produto.Ebook", _quantity=1, arquivo="ebooks/teste.pdf")
         produto = baker.make("produto.Livro", estoque=10)
 
         response = api_client.get(f"/api/produtos/{produto.id}/")

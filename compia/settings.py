@@ -177,15 +177,22 @@ JAZZMIN_SETTINGS = {
     ],
     "order_with_respect_to": [
         "dashboard",
-        "user",
         "produto",
+        "produto.Produto",
+        "produto.Livro",
+        "produto.Ebook",
+        "cliente",
+        "vendedor",
+        "pedido",
     ],
     "icons" : {
         "user.User": "fas fa-user",
         "cliente.Cliente": "fas fa-users",
         "vendedor.Vendedor": "fas fa-store",
         "pedido.Pedido": "fas fa-shopping-cart",
-        "produto.Produto": "fas fa-book",
+        "produto.Produto": "fas fa-box",
+        "produto.Livro": "fas fa-book",
+        "produto.Ebook": "fas fa-file-alt",
         "produto.Categoria": "fas fa-tags",
     }
 }
