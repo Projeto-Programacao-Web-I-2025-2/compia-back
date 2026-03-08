@@ -11,6 +11,9 @@ class ProdutoAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    def has_change_permission(self, request):
+        return False
+
 
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ("id", "nome",)
@@ -29,6 +32,9 @@ class LivroAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    def has_change_permission(self, request):
+        return False
+
 
 class EbookAdmin(admin.ModelAdmin):
     list_display = ("id", "nome", "preco",)
@@ -36,6 +42,9 @@ class EbookAdmin(admin.ModelAdmin):
     search_fields = ("nome",)
 
     def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request):
         return False
 
 
