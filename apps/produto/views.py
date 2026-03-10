@@ -75,7 +75,13 @@ class LivroViewSet(
 ):
     serializer_class = LivroSerializer
     permission_classes = [IsSellerUser]
-    queryset = Livro.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        vendedor = getattr(user, "vendedor", None)
+        if vendedor:
+            return Livro.objects.filter(vendedor=vendedor)
+        return Livro.objects.none()
 
 
 class EbookViewSet(
@@ -86,4 +92,10 @@ class EbookViewSet(
 ):
     serializer_class = EbookSerializer
     permission_classes = [IsSellerUser]
-    queryset = Ebook.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        vendedor = getattr(user, "vendedor", None)
+        if vendedor:
+            return Ebook.objects.filter(vendedor=vendedor)
+        return Ebook.objects.none()

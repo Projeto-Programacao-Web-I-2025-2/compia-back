@@ -158,6 +158,33 @@ class TestProdutoViewSet:
 
         assert response.status_code == 404
 
+    def test_update_stock_as_seller(self, api_client, seller_user):
+        api_client.force_authenticate(user=seller_user)
+        livro = baker.make("produto.Livro", vendedor=seller_user.vendedor, estoque=10)
+
+        payload = {
+            "estoque": 5,
+        }
+
+        response = api_client.patch(f"/api/produtos/livros/{livro.id}/", payload)
+
+        assert response.status_code == 200
+        livro.refresh_from_db()
+        assert livro.estoque == payload["estoque"]
+
+    def test_update_stock_as_other_seller(self, api_client, seller_user):
+        other_user = baker.make("user.User")
+        other_seller = baker.make("vendedor.Vendedor", user=other_user)
+        livro = baker.make("produto.Livro", estoque=1, vendedor=other_seller)
+        api_client.force_authenticate(user=seller_user)
+        payload = {
+            "estoque": 5,
+        }
+
+        response = api_client.patch(f"/api/produtos/livros/{livro.id}/", payload)
+
+        assert response.status_code == 404
+
 
 @pytest.mark.django_db
 class TestLivroViewSet:

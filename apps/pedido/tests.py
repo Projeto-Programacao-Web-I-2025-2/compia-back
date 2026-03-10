@@ -51,7 +51,7 @@ class TestPedidoViewSet:
         assert response.status_code == 200
         assert response.data["count"] == 2
 
-    def test_patient_cannot_see_other_clients_pedidos(self, api_client, client_user):
+    def test_client_cannot_see_other_clients_orders(self, api_client, client_user):
         other_cliente = baker.make("cliente.Cliente")
         baker.make("pedido.Pedido", cliente=other_cliente)
         api_client.force_authenticate(user=client_user)
@@ -95,3 +95,36 @@ class TestPedidoViewSet:
 
         assert response.status_code == 200
         assert response.data["count"] == 2
+
+    def test_create_pedido_and_decrement_stock(self, api_client, client_user):
+        livro = baker.make("produto.Livro", estoque=5)
+        api_client.force_authenticate(user=client_user)
+        payload = {
+            "frete": "0.00",
+            "itens": [
+                {"produto": livro.id, "quantidade": 3},
+            ],
+        }
+
+        response = api_client.post("/api/pedidos/", payload, format="json")
+
+        assert response.status_code == 201
+        livro.refresh_from_db()
+        assert livro.estoque == 2
+
+    def test_create_pedido_with_insufficient_stock(self, api_client, client_user):
+        livro = baker.make("produto.Livro", estoque=2)
+        api_client.force_authenticate(user=client_user)
+        payload = {
+            "frete": "0.00",
+            "itens": [
+                {"produto": livro.id, "quantidade": 3},
+            ],
+        }
+
+        response = api_client.post("/api/pedidos/", payload, format="json")
+
+        assert response.status_code == 400
+        assert "Estoque insuficiente" in str(response.data)
+        livro.refresh_from_db()
+        assert livro.estoque == 2

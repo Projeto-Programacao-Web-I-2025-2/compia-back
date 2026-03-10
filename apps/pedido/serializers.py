@@ -45,6 +45,17 @@ class PedidoSerializer(serializers.ModelSerializer):
         except Cliente.DoesNotExist:
             raise serializers.ValidationError("Usuário não possui perfil de cliente.")
 
+        for item in itens_data:
+            produto = item['produto']
+            quantidade = item['quantidade']
+            if hasattr(produto, 'livro'):
+                if produto.livro.estoque < quantidade:
+                    estoque_disponivel = produto.livro.estoque
+                    raise serializers.ValidationError(
+                        f"Estoque insuficiente para '{produto.nome}'. "
+                        f"Disponível: {estoque_disponivel}, solicitado: {quantidade}."
+                    )
+
         pedido = Pedido.objects.create(cliente=cliente, **validated_data)
         itens_objs = []
         for item in itens_data:
@@ -53,6 +64,11 @@ class PedidoSerializer(serializers.ModelSerializer):
                 produto=item['produto'],
                 quantidade=item['quantidade']
             )
+            produto = item['produto']
+            quantidade = item['quantidade']
+            if hasattr(produto, 'livro'):
+                produto.livro.estoque -= quantidade
+                produto.livro.save()
             itens_objs.append(item_obj)
         pedido.total = self.calculate_total(itens_objs, frete)
         pedido.save()
