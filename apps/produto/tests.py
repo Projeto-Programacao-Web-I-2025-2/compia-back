@@ -151,6 +151,13 @@ class TestProdutoViewSet:
             assert response.data[i]["id"] == products[i].id
             assert response.data[i]["nome"] == products[i].nome
 
+    def test_list_seller_products_as_non_seller(self, api_client, client_user):
+        api_client.force_authenticate(user=client_user)
+
+        response = api_client.get("/api/produtos/meus-produtos/")
+
+        assert response.status_code == 404
+
 
 @pytest.mark.django_db
 class TestLivroViewSet:
