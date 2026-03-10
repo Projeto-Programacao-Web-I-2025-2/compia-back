@@ -5,6 +5,8 @@ from rest_framework.response import Response
 
 from .models import Vendedor
 from .serializers import VendedorCreateSerializer, VendedorSerializer
+from apps.produto.models import Produto
+from apps.produto.serializers import ProdutoSerializer
 from apps.user.permissions import IsSellerUser
 
 
@@ -45,3 +47,12 @@ class VendedorViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewse
             vendedor.delete()
             user.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['get'], url_path='meus-produtos')
+    def meus_produtos(self, request):
+        vendedor = getattr(request.user, "vendedor", None)
+        if not vendedor:
+            return Response({"detail": "Vendedor não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        produtos = Produto.objects.filter(vendedor=vendedor)
+        serializer = ProdutoSerializer(produtos, many=True)
+        return Response(serializer.data)
