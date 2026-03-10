@@ -1,4 +1,4 @@
-from rest_framework import mixins, viewsets, filters
+from rest_framework import mixins, status, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -22,7 +22,6 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ProdutoPagination
     serializer_class = ProdutoSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = Produto.objects.all().filter(
@@ -35,6 +34,11 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
         elif tipo == "ebook":
             queryset = queryset.filter(ebook__isnull=False)
         return queryset.distinct()
+
+    def get_permissions(self):
+        if self.action in ["meus-produtos"]:
+            return [IsSellerUser()]
+        return [AllowAny()]
 
     @extend_schema(
         summary="Lista todas as categorias",
@@ -51,6 +55,15 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
     def categorias(self, request):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='meus-produtos')
+    def meus_produtos(self, request):
+        vendedor = getattr(request.user, "vendedor", None)
+        if not vendedor:
+            return Response({"detail": "Vendedor não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        produtos = Produto.objects.filter(vendedor=vendedor)
+        serializer = ProdutoSerializer(produtos, many=True)
         return Response(serializer.data)
 
 

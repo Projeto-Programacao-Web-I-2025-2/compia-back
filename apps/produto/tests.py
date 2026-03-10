@@ -138,6 +138,19 @@ class TestProdutoViewSet:
         for result in response.data["results"]:
             assert categoria1.id in result["categorias"]
 
+    def test_list_seller_products(self, api_client, seller_user):
+        api_client.force_authenticate(user=seller_user)
+        products = baker.make("produto.Produto", vendedor=seller_user.vendedor, _quantity=3)
+        baker.make("produto.Produto", _quantity=2)
+
+        response = api_client.get("/api/produtos/meus-produtos/")
+
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        for i in range(3):
+            assert response.data[i]["id"] == products[i].id
+            assert response.data[i]["nome"] == products[i].nome
+
 
 @pytest.mark.django_db
 class TestLivroViewSet:
