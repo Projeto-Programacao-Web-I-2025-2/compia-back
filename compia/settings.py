@@ -37,6 +37,7 @@ LOCAL_APPS = [
     "apps.produto",
     "apps.user",
     "apps.vendedor",
+    "apps.venda",
 ]
 
 DJANGO_APPS = [

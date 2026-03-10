@@ -26,6 +26,7 @@ apps_patterns = [
     path("pedidos/", include("apps.pedido.urls")),
     path("produtos/", include("apps.produto.urls")),
     path("vendedores/", include("apps.vendedor.urls")),
+    path("vendas/", include("apps.venda.urls")),
 ]
 
 urlpatterns = [

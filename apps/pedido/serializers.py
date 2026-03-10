@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
+
 from .models import Pedido, ItemPedido
 from apps.cliente.models import Cliente
+from apps.venda.models import ItemVenda, Venda
 from decimal import Decimal
 
 
@@ -58,18 +60,47 @@ class PedidoSerializer(serializers.ModelSerializer):
 
         pedido = Pedido.objects.create(cliente=cliente, **validated_data)
         itens_objs = []
+        vendas_por_vendedor = {}
+
         for item in itens_data:
-            item_obj = ItemPedido.objects.create(
-                pedido=pedido,
-                produto=item['produto'],
-                quantidade=item['quantidade']
-            )
             produto = item['produto']
             quantidade = item['quantidade']
+            vendedor = getattr(produto, 'vendedor', None)
+            if not vendedor:
+                raise serializers.ValidationError(f"Produto '{produto.nome}' não possui vendedor associado.")
+
+            item_obj = ItemPedido.objects.create(
+                pedido=pedido,
+                produto=produto,
+                quantidade=quantidade
+            )
+            itens_objs.append(item_obj)
+
             if hasattr(produto, 'livro'):
                 produto.livro.estoque -= quantidade
                 produto.livro.save()
-            itens_objs.append(item_obj)
+
+            if vendedor not in vendas_por_vendedor:
+                vendas_por_vendedor[vendedor] = []
+            vendas_por_vendedor[vendedor].append((produto, quantidade))
+
+        for vendedor, produtos in vendas_por_vendedor.items():
+            venda = Venda.objects.create(
+                cliente=cliente,
+                vendedor=vendedor,
+                valor_total=0
+            )
+            valor_total = Decimal('0.00')
+            for produto, quantidade in produtos:
+                ItemVenda.objects.create(
+                    venda=venda,
+                    produto=produto,
+                    quantidade=quantidade
+                )
+                valor_total += produto.preco * quantidade
+            venda.valor_total = valor_total
+            venda.save()
+
         pedido.total = self.calculate_total(itens_objs, frete)
         pedido.save()
         return pedido
