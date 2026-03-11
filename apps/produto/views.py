@@ -9,7 +9,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .models import Categoria, Ebook, Livro, Produto
-from .pagination import ProdutoPagination
 from .schemas import produto_schema
 from .serializers import CategoriaSerializer, ProdutoSerializer, LivroSerializer, EbookSerializer
 from apps.user.permissions import IsSellerUser
@@ -17,11 +16,11 @@ from apps.user.permissions import IsSellerUser
 
 @produto_schema
 class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
-    filterset_fields = ["nome", "descricao", "idioma", "categorias"]
+    filterset_fields = ["idioma", "categorias"]
     ordering_fields = ["nome", "preco", "ano_lancamento"]
-    pagination_class = ProdutoPagination
     serializer_class = ProdutoSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ["nome", "descricao"]
 
     def get_queryset(self):
         queryset = Produto.objects.all().filter(

@@ -15,7 +15,7 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/")
 
         assert response.status_code == 200
-        assert response.data["count"] == 3
+        assert len(response.data) == 3
 
     def test_list_produtos_livro(self, api_client):
         baker.make("produto.Livro", _quantity=1, estoque=10)
@@ -23,10 +23,10 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/?tipo=livro")
 
         assert response.status_code == 200
-        assert response.data["count"] == 1
-        assert response.data["results"][0]["tipo"] == "livro"
-        assert response.data["results"][0]["estoque"] is not None
-        assert response.data["results"][0]["arquivo"] is None
+        assert len(response.data) == 1
+        assert response.data[0]["tipo"] == "livro"
+        assert response.data[0]["estoque"] is not None
+        assert response.data[0]["arquivo"] is None
 
     def test_list_produtos_ebook(self, api_client):
         baker.make("produto.Ebook", _quantity=1, arquivo="ebooks/teste.pdf")
@@ -34,10 +34,10 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/?tipo=ebook")
 
         assert response.status_code == 200
-        assert response.data["count"] == 1
-        assert response.data["results"][0]["tipo"] == "ebook"
-        assert response.data["results"][0]["estoque"] is None
-        assert response.data["results"][0]["arquivo"] is not None
+        assert len(response.data) == 1
+        assert response.data[0]["tipo"] == "ebook"
+        assert response.data[0]["estoque"] is None
+        assert response.data[0]["arquivo"] is not None
 
     def test_retrieve_livro(self, api_client):
         baker.make("produto.Ebook", _quantity=1, arquivo="ebooks/teste.pdf")
@@ -87,10 +87,10 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/")
 
         assert response.status_code == 200
-        assert response.data["count"] == 1
-        assert response.data["results"][0]["tipo"] == "ebook"
-        assert response.data["results"][0]["estoque"] is None
-        assert response.data["results"][0]["arquivo"] is not None
+        assert len(response.data) == 1
+        assert response.data[0]["tipo"] == "ebook"
+        assert response.data[0]["estoque"] is None
+        assert response.data[0]["arquivo"] is not None
 
     def test_list_produtos_filter_by_tipo(self, api_client):
         baker.make("produto.Livro", estoque=10, _quantity=2)
@@ -99,8 +99,8 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/?tipo=livro")
 
         assert response.status_code == 200
-        assert response.data["count"] == 2
-        for result in response.data["results"]:
+        assert len(response.data) == 2
+        for result in response.data:
             assert result["tipo"] == "livro"
             assert result["estoque"] is not None
             assert result["arquivo"] is None
@@ -113,8 +113,8 @@ class TestProdutoViewSet:
         response = api_client.get("/api/produtos/?idioma=PT")
 
         assert response.status_code == 200
-        assert response.data["count"] == 2
-        for result in response.data["results"]:
+        assert len(response.data) == 2
+        for result in response.data:
             assert result["idioma"] == "PT"
 
     def test_list_produtos_filter_by_categoria(self, api_client):
@@ -134,8 +134,8 @@ class TestProdutoViewSet:
         response = api_client.get(f"/api/produtos/?categorias={categoria1.id}")
 
         assert response.status_code == 200
-        assert response.data["count"] == 3
-        for result in response.data["results"]:
+        assert len(response.data) == 3
+        for result in response.data:
             assert categoria1.id in result["categorias"]
 
     def test_list_seller_products(self, api_client, seller_user):

@@ -49,7 +49,7 @@ class TestPedidoViewSet:
         response = api_client.get("/api/pedidos/")
 
         assert response.status_code == 200
-        assert response.data["count"] == 2
+        assert len(response.data) == 2
 
     def test_client_cannot_see_other_clients_orders(self, api_client, client_user):
         other_cliente = baker.make("cliente.Cliente")
@@ -59,7 +59,7 @@ class TestPedidoViewSet:
         response = api_client.get("/api/pedidos/")
 
         assert response.status_code == 200
-        assert response.data["count"] == 0
+        assert len(response.data) == 0
 
     def test_cancelar_pedido(self, api_client, client_user):
         cliente = Cliente.objects.get(user=client_user)
@@ -94,7 +94,7 @@ class TestPedidoViewSet:
         response = api_client.get("/api/pedidos/")
 
         assert response.status_code == 200
-        assert response.data["count"] == 2
+        assert len(response.data) == 2
 
     def test_create_pedido_and_decrement_stock(self, api_client, client_user):
         livro = baker.make("produto.Livro", estoque=5)

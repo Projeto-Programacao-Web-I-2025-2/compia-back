@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Pedido
-from .pagination import PedidoPagination
 from .schemas import pedido_schema
 from .serializers import PedidoSerializer
 from apps.cliente.models import Cliente
@@ -22,7 +21,6 @@ class PedidoViewSet(
     filterset_fields = ["status"]
     search_fields = ["produtos__nome"]
     ordering_fields = ["data_pedido", "total"]
-    pagination_class = PedidoPagination
     permission_classes = [IsAuthenticated, IsClientUser]
 
     def get_queryset(self):
