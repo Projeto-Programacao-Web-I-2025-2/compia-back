@@ -102,6 +102,7 @@ class PedidoSerializer(serializers.ModelSerializer):
             venda.save()
 
         pedido.total = self.calculate_total(itens_objs, frete)
+        pedido.status = Pedido.StatusPedido.CONFIRMADO
         pedido.save()
         return pedido
 

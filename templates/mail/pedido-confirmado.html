@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Pedido Confirmado</title>
+	<style>
+		body { font-family: Arial, sans-serif; color: #222; }
+		.container { max-width: 600px; margin: 0 auto; padding: 24px; background: #f9f9f9; border-radius: 8px; }
+		.header { color: #2c3e50; }
+		.itens-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+		.itens-table th, .itens-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+		.itens-table th { background: #f1f1f1; }
+		.footer { margin-top: 24px; color: #555; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h2 class="header">Pedido confirmado!</h2>
+		<p>Olá {{ cliente_nome }},</p>
+		<p>Seu pedido <strong>#{{ pedido_id }}</strong> foi confirmado com sucesso.</p>
+
+		<p><strong>Total do pedido:</strong> R$ {{ pedido_total }}</p>
+		{% if pedido_frete %}
+		<p><strong>Frete:</strong> R$ {{ pedido_frete }}</p>
+		{% endif %}
+
+		<div class="footer">
+			<p>Obrigado por comprar conosco!</p>
+			<p>Se você comprou um eBook, aguarde: você receberá um e-mail com o arquivo para download.</p>
+			<p>Qualquer dúvida, estamos à disposição.</p>
+		</div>
+	</div>
+</body>
+</html>
