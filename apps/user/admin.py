@@ -31,12 +31,9 @@ class UserAdmin(BaseUserAdmin):
         # Se for o próprio usuário, pode editar tudo
         if request.user == obj:
             return ()
-        # Se o usuário autenticado for BACKOFFICE, pode editar tudo
-        if obj.role == request.user.Role.BACKOFFICE:
+        # Se o usuário autenticado for superuser e o objeto for BACKOFFICE, pode editar tudo
+        if request.user.is_superuser and obj.role == request.user.Role.BACKOFFICE:
             return ()
-        # Se o usuário autenticado for EDITOR, nao pode editar outros EDITOR ou BACKOFFICE
-        if obj.role == request.user.Role.EDITOR and request.user.role == request.user.Role.EDITOR:
-            return ("nome", "email", "password", "role")
         # Caso contrário, readonly nos campos sensíveis
         return ("nome", "email", "password", "role")
 
@@ -44,6 +41,15 @@ class UserAdmin(BaseUserAdmin):
         if obj.role == obj.Role.BACKOFFICE:
             obj.is_staff = True
         super().save_model(request, obj, form, change)
+
+    def has_module_permission(self, request):
+        return request.user.is_staff
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff
 
 
 admin.site.register(User, UserAdmin)

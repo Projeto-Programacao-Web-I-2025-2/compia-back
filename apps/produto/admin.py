@@ -24,7 +24,7 @@ class ProdutoTypeFilter(SimpleListFilter):
 
 
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ("produto", "nome", "preco")
+    list_display = ("nome", "produto", "preco")
     list_filter = ("categorias", "idioma", ProdutoTypeFilter)
     search_fields = ("nome",)
 
@@ -39,7 +39,7 @@ class ProdutoAdmin(admin.ModelAdmin):
     produto.short_description = "Produto"
 
     def has_view_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.role == request.user.Role.BACKOFFICE
+        return request.user.is_superuser
 
     def has_add_permission(self, request):
         return False
@@ -50,10 +50,28 @@ class ProdutoAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
 
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
 
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ("id", "nome",)
     search_fields = ("nome",)
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_add_permission(self, request):
+        return request.user.is_staff
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_staff
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_module_permission(self, request):
+        return request.user.is_staff
 
 
 admin.site.register(Produto, ProdutoAdmin)
@@ -62,7 +80,7 @@ admin.site.register(Categoria, CategoriaAdmin)
 
 class LivroAdmin(admin.ModelAdmin):
     list_display = ("id", "nome", "preco", "estoque", "idioma", "vendedor")
-    list_filter = ("categorias",)
+    list_filter = ("categorias", "idioma")
     search_fields = ("nome",)
     readonly_fields = (
         "id", "nome", "preco", "estoque", "vendedor", "descricao",
@@ -74,21 +92,24 @@ class LivroAdmin(admin.ModelAdmin):
     )
 
     def has_view_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.groups.filter(name="backoffice").exists()
+        return request.user.is_staff
 
     def has_add_permission(self, request):
-        return request.user.is_superuser
+        return False
 
     def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser
+        return request.user.is_staff
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
 
+    def has_module_permission(self, request):
+        return request.user.is_staff
+
 
 class EbookAdmin(admin.ModelAdmin):
     list_display = ("id", "nome", "preco", "idioma", "vendedor")
-    list_filter = ("categorias",)
+    list_filter = ("categorias", "idioma")
     search_fields = ("nome",)
     readonly_fields = (
         "id", "nome", "preco", "arquivo", "vendedor", "descricao",
@@ -100,16 +121,19 @@ class EbookAdmin(admin.ModelAdmin):
     )
 
     def has_view_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.groups.filter(name="backoffice").exists()
+        return request.user.is_staff
 
     def has_add_permission(self, request):
         return request.user.is_superuser
 
     def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser
+        return request.user.is_staff
 
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
+
+    def has_module_permission(self, request):
+        return request.user.is_staff
 
 
 admin.site.register(Livro, LivroAdmin)
