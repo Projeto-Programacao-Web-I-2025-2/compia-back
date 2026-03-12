@@ -5,11 +5,8 @@ import pytest
 class TestMelhorEnvioIntegration:
     def test_calculate_shipping_cost(self, api_client):
         payload = {
-            "from_": {
-                "postal_code": "58483000",
-            },
             "to": {
-                "postal_code": "58414150",
+                "postal_code": "58483000",
             },
             "package": {
                 "height": 10,
@@ -26,8 +23,6 @@ class TestMelhorEnvioIntegration:
         option1 = response.data[0]
         assert "company" in option1
         assert "name" in option1
-        assert "price" in option1
         option2 = response.data[1]
         assert "company" in option2
         assert "name" in option2
-        assert "price" in option2

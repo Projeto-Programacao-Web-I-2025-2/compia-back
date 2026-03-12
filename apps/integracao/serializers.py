@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class MelhorEnvioFromToSerializer(serializers.Serializer):
-    postal_code = serializers.CharField(help_text="CEP de origem/destino. Exemplo: 58483000")
+    postal_code = serializers.CharField(help_text="CEP destino. Exemplo: 58483000")
 
 
 class MelhorEnvioPackageSerializer(serializers.Serializer):
@@ -13,7 +13,6 @@ class MelhorEnvioPackageSerializer(serializers.Serializer):
 
 
 class MelhorEnvioFreteSerializer(serializers.Serializer):
-    from_ = MelhorEnvioFromToSerializer(source="from", write_only=True, required=True)
     to = MelhorEnvioFromToSerializer(write_only=True, required=True)
     package = MelhorEnvioPackageSerializer(write_only=True, required=True)
 

@@ -244,3 +244,4 @@ DEFAULT_FROM_EMAIL = 'default from email'
 
 MELHOR_ENVIO_TOKEN = os.getenv('MELHOR_ENVIO_TOKEN')
 MELHOR_ENVIO_URL = os.getenv('MELHOR_ENVIO_URL')
+CEP_UFCG = os.getenv('CEP_UFCG')

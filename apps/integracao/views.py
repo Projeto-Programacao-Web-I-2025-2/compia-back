@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from compia.settings import MELHOR_ENVIO_TOKEN, MELHOR_ENVIO_URL, EMAIL_HOST_USER
+from compia.settings import MELHOR_ENVIO_TOKEN, MELHOR_ENVIO_URL, EMAIL_HOST_USER, CEP_UFCG
 from .serializers import MelhorEnvioFreteSerializer
 
 
@@ -19,7 +19,9 @@ class MelhorEnvioFreteView(APIView):
         data = serializer.validated_data
 
         payload = {
-            "from": data["from"],
+            "from": {
+                "postal_code": CEP_UFCG,
+            },
             "to": data["to"],
             "products": [
                 {

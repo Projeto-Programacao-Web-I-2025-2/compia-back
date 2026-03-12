@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from drf_spectacular.utils import extend_schema_field
 
 from .models import Pedido, ItemPedido
 from apps.cliente.models import Cliente
@@ -38,6 +38,19 @@ class PedidoSerializer(serializers.ModelSerializer):
             total += frete
         return total
 
+    @extend_schema_field(
+        {
+            "type": "object",
+            "properties": {
+                "height": {"type": "number", "example": 6},
+                "width": {"type": "number", "example": 17},
+                "length": {"type": "number", "example": 24},
+                "weight": {"type": "number", "example": 1.1},
+            },
+            "nullable": True,
+            "description": "Dimensões e peso do pacote para cálculo de frete."
+        }
+    )
     def get_pacote(self, obj):
         height = 0
         width = 17
