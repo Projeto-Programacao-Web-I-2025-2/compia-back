@@ -186,3 +186,72 @@ class TestPedidoViewSet:
         assert response.data["frete"] == "15.00"
         assert response.data["data_entrega"] == "2024-12-31"
         assert response.data["total"] == "65.00"
+
+    def test_create_pedido_status_aberto(self, api_client, client_user):
+        produto = baker.make("produto.Livro", preco=10.00)
+        api_client.force_authenticate(user=client_user)
+        payload = {
+            "frete": "10.00",
+            "itens": [
+                {"produto": produto.id, "quantidade": 2},
+            ],
+            "status": "ABERTO"
+        }
+
+        response = api_client.post("/api/pedidos/", payload, format="json")
+
+        assert response.status_code == 201
+        assert response.data["status"] == "ABERTO"
+
+    def test_create_pedido_status_confirmado(self, api_client, client_user):
+        produto = baker.make("produto.Livro", preco=10.00)
+        api_client.force_authenticate(user=client_user)
+        payload = {
+            "frete": "10.00",
+            "itens": [
+                {"produto": produto.id, "quantidade": 2},
+            ],
+            "status": "CONFIRMADO"
+        }
+
+        response = api_client.post("/api/pedidos/", payload, format="json")
+
+        assert response.status_code == 201
+        assert response.data["status"] == "CONFIRMADO"
+
+    def test_update_pedido_status_confirmado(self, api_client, client_user):
+        cliente = client_user.cliente
+        pedido = baker.make("pedido.Pedido", cliente=cliente, status=Pedido.StatusPedido.ABERTO)
+        produto = baker.make("produto.Produto", preco=50.00)
+        baker.make("pedido.ItemPedido", pedido=pedido, produto=produto, quantidade=1)
+        api_client.force_authenticate(user=client_user)
+
+        payload = {
+            "status": "CONFIRMADO"
+        }
+
+        response = api_client.patch(f"/api/pedidos/{pedido.id}/", payload, format="json")
+
+        assert response.status_code == 200
+        assert response.data["status"] == "CONFIRMADO"
+
+    def test_update_produto_status_frete_data_entrega(self, api_client, client_user):
+        cliente = client_user.cliente
+        pedido = baker.make("pedido.Pedido", cliente=cliente, status=Pedido.StatusPedido.ABERTO)
+        produto = baker.make("produto.Produto", preco=50.00)
+        baker.make("pedido.ItemPedido", pedido=pedido, produto=produto, quantidade=1)
+        api_client.force_authenticate(user=client_user)
+
+        payload = {
+            "status": "CONFIRMADO",
+            "frete": "20.00",
+            "data_entrega": "2024-12-31"
+        }
+
+        response = api_client.patch(f"/api/pedidos/{pedido.id}/", payload, format="json")
+
+        assert response.status_code == 200
+        assert response.data["id"] == pedido.id
+        assert response.data["status"] == "CONFIRMADO"
+        assert response.data["frete"] == "20.00"
+        assert response.data["data_entrega"] == "2024-12-31"

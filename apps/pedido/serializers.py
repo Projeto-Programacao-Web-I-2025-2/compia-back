@@ -16,6 +16,7 @@ class ItemPedidoSerializer(serializers.ModelSerializer):
 class PedidoSerializer(serializers.ModelSerializer):
     itens = ItemPedidoSerializer(many=True)
     pacote = serializers.SerializerMethodField()
+    status = serializers.ChoiceField(choices=Pedido.StatusPedido.choices, default=Pedido.StatusPedido.ABERTO)
 
     class Meta:
         model = Pedido
@@ -139,7 +140,6 @@ class PedidoSerializer(serializers.ModelSerializer):
             venda.save()
 
         pedido.total = self.calculate_total(itens_objs, frete)
-        pedido.status = Pedido.StatusPedido.CONFIRMADO
         pedido.save()
         return pedido
 
