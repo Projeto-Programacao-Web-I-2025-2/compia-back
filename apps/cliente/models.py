@@ -34,4 +34,4 @@ class Cliente(models.Model):
         verbose_name_plural = "Clientes"
 
     def __str__(self):
-        return f"Cliente - {self.user.nome}"
+        return f"{self.user.nome} - {self.user.email}"

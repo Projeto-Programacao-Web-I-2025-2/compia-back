@@ -14,4 +14,4 @@ class Vendedor(models.Model):
         verbose_name_plural = "Vendedores"
 
     def __str__(self):
-        return f"Vendedor - {self.user.nome}"
+        return f"{self.user.nome} - {self.user.email}"

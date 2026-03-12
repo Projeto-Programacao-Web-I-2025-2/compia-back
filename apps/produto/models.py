@@ -22,7 +22,7 @@ class Produto(models.Model):
 
     nome = models.CharField(
         max_length=100,
-        verbose_name="Produto",
+        verbose_name="Título",
     )
     vendedor = models.ForeignKey(
         "vendedor.Vendedor",

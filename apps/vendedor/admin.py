@@ -6,6 +6,11 @@ from .models import Vendedor
 class VendedorAdmin(admin.ModelAdmin):
     list_display = ("id", "user_nome", "user_email")
     search_fields = ("user__nome", "user__email")
+    fieldsets = (
+        ("Informações do Vendedor", {
+            "fields": ("user_nome", "user_email")
+        }),
+    )
 
     def user_nome(self, obj):
         return obj.user.nome

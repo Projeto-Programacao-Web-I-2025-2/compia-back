@@ -43,7 +43,7 @@ class Pedido(models.Model):
         related_name="pedidos",
         verbose_name="Produtos",
     )
-    data_pedido = models.DateTimeField(
+    data_pedido = models.DateField(
         auto_now_add=True,
         verbose_name="Data do Pedido",
         null=True,

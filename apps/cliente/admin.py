@@ -6,6 +6,11 @@ from .models import Cliente
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ("id", "user_nome", "user_email")
     search_fields = ("user__nome", "user__email")
+    fieldsets = (
+        ("Informações do Cliente", {
+            "fields": ("user_nome", "user_email", "endereco")
+        }),
+    )
 
     def user_nome(self, obj):
         return obj.user.nome
@@ -22,6 +27,15 @@ class ClienteAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+    def has_module_permission(self, request):
+        return True
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
     def delete_model(self, request, obj):
         user = obj.user
