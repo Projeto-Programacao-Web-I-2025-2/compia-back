@@ -38,6 +38,7 @@ class TestClienteViewSet():
         assert client.endereco.cidade == payload["endereco"]["cidade"]
         assert client.endereco.estado == payload["endereco"]["estado"]
         assert client.endereco.cep == payload["endereco"]["cep"]
+        assert client.user.role == User.Role.CLIENTE
 
     def test_client_without_address_creation(self, api_client):
         payload = {
@@ -53,6 +54,7 @@ class TestClienteViewSet():
         assert client.user.nome == payload["nome"]
         assert client.user.email == payload["email"]
         assert client.endereco is None
+        assert client.user.role == User.Role.CLIENTE
 
     def test_client_retrieve(self, api_client, client_user):
         api_client.force_authenticate(user=client_user)

@@ -19,6 +19,7 @@ class TestVendedorViewSet():
         vendedor = Vendedor.objects.get(user__email=payload["email"])
         assert vendedor.user.nome == payload["nome"]
         assert vendedor.user.email == payload["email"]
+        assert response.data["role"] == User.Role.VENDEDOR
 
     def test_seller_creation_without_email_fails(self, api_client):
         payload = {
@@ -39,6 +40,7 @@ class TestVendedorViewSet():
         assert response.status_code == 200
         assert response.data["nome"] == seller_user.nome
         assert response.data["email"] == seller_user.email
+        assert response.data["role"] == User.Role.VENDEDOR
 
     def test_seller_partial_update(self, api_client, seller_user):
         api_client.force_authenticate(user=seller_user)
@@ -51,6 +53,7 @@ class TestVendedorViewSet():
         seller_user.refresh_from_db()
         assert seller_user.nome == new_nome
         assert seller_user.email == new_email
+        assert response.data["role"] == User.Role.VENDEDOR
 
     def test_seller_update_name(self, api_client, seller_user):
         api_client.force_authenticate(user=seller_user)

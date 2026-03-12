@@ -15,10 +15,11 @@ class ClienteCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
     endereco = EnderecoSerializer(required=False)
+    role = serializers.CharField(source="user.role", read_only=True)
 
     class Meta:
         model = Cliente
-        fields = ["id", "nome", "email", "password", "endereco"]
+        fields = ["id", "nome", "email", "password", "endereco", "role"]
 
     def create(self, validated_data):
         nome = validated_data.pop("nome")
@@ -40,10 +41,11 @@ class ClienteSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(source="user.nome")
     email = serializers.EmailField(source="user.email")
     endereco = EnderecoSerializer(required=False)
+    role = serializers.CharField(source="user.role", read_only=True)
 
     class Meta:
         model = Cliente
-        fields = ["id", "nome", "email", "endereco"]
+        fields = ["id", "nome", "email", "endereco", "role"]
 
     def update(self, instance, validated_data):
         endereco_data = validated_data.pop("endereco", None)
