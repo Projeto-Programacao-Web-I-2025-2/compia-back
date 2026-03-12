@@ -15,6 +15,7 @@ class ItemPedidoSerializer(serializers.ModelSerializer):
 
 class PedidoSerializer(serializers.ModelSerializer):
     itens = ItemPedidoSerializer(many=True)
+    pacote = serializers.SerializerMethodField()
 
     class Meta:
         model = Pedido
@@ -27,14 +28,37 @@ class PedidoSerializer(serializers.ModelSerializer):
             "frete",
             "total",
             "status",
+            "pacote",
         ]
-        read_only_fields = ["total", "cliente"]
+        read_only_fields = ["total", "cliente", "pacote"]
 
     def calculate_total(self, itens, frete):
         total = sum([item.produto.preco * item.quantidade for item in itens])
         if frete:
             total += frete
         return total
+
+    def get_pacote(self, obj):
+        height = 0
+        width = 17
+        length = 24
+        weight = 0.1
+
+        for item in obj.itens.all():
+            produto = item.produto
+            if hasattr(produto, 'livro'):
+                height += 3 * item.quantidade
+                weight += 0.5 * item.quantidade
+
+        if (weight == 0.1):
+            return None
+
+        return {
+            "height": height,
+            "width": width,
+            "length": length,
+            "weight": weight
+        }
 
     def create(self, validated_data):
         request = self.context.get('request')

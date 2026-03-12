@@ -56,7 +56,7 @@ class Pedido(models.Model):
         blank=True,
         null=True,
     )
-    data_entrega = models.DateTimeField(
+    data_entrega = models.DateField(
         verbose_name="Data de Entrega",
         null=True,
         blank=True,
