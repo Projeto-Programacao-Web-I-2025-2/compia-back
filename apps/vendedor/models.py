@@ -8,13 +8,6 @@ class Vendedor(models.Model):
         related_name="vendedor",
         verbose_name="Vendedor",
     )
-    endereco = models.OneToOneField(
-        "cliente.Endereco",
-        on_delete=models.SET_NULL,
-        related_name="vendedor",
-        verbose_name="Endereço",
-        null=True,
-    )
 
     class Meta:
         verbose_name = "Vendedor"

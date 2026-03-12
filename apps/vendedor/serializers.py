@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
 from .models import Vendedor
-from apps.cliente.models import Endereco
-from apps.cliente.serializers import EnderecoSerializer
 from apps.user.models import User
 
 
@@ -10,11 +8,10 @@ class VendedorCreateSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
-    endereco = EnderecoSerializer(required=False)
 
     class Meta:
         model = Vendedor
-        fields = ["id", "nome", "email", "password", "endereco"]
+        fields = ["id", "nome", "email", "password"]
 
     def create(self, validated_data):
         nome = validated_data.pop("nome")
@@ -26,31 +23,19 @@ class VendedorCreateSerializer(serializers.ModelSerializer):
             password=password,
             role=User.Role.VENDEDOR
         )
-        endereco_data = validated_data.pop("endereco", None)
-        endereco = Endereco.objects.create(**endereco_data) if endereco_data else None
-        vendedor = Vendedor.objects.create(user=user, endereco=endereco, **validated_data)
+        vendedor = Vendedor.objects.create(user=user, **validated_data)
         return vendedor
 
 
 class VendedorSerializer(serializers.ModelSerializer):
     nome = serializers.CharField(source="user.nome")
     email = serializers.EmailField(source="user.email")
-    endereco = EnderecoSerializer(required=False)
 
     class Meta:
         model = Vendedor
-        fields = ["id", "nome", "email", "endereco"]
+        fields = ["id", "nome", "email"]
 
     def update(self, instance, validated_data):
-        endereco_data = validated_data.pop("endereco", None)
-        if endereco_data:
-            if instance.endereco:
-                for attr, value in endereco_data.items():
-                    setattr(instance.endereco, attr, value)
-                instance.endereco.save()
-            else:
-                instance.endereco = Endereco.objects.create(**endereco_data)
-                instance.save()
         user_data = validated_data.pop("user", {})
         nome = user_data.get("nome")
         if nome:
