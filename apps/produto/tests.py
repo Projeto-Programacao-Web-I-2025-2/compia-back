@@ -80,18 +80,6 @@ class TestProdutoViewSet:
         assert response.status_code == 200
         assert len(response.data) == 3
 
-    def test_list_produtos_with_estoque_zero(self, api_client):
-        baker.make("produto.Livro", estoque=0, _quantity=1)
-        baker.make("produto.Ebook", arquivo="ebooks/teste.pdf", _quantity=1)
-
-        response = api_client.get("/api/produtos/")
-
-        assert response.status_code == 200
-        assert len(response.data) == 1
-        assert response.data[0]["tipo"] == "ebook"
-        assert response.data[0]["estoque"] is None
-        assert response.data[0]["arquivo"] is not None
-
     def test_list_produtos_filter_by_tipo(self, api_client):
         baker.make("produto.Livro", estoque=10, _quantity=2)
         baker.make("produto.Ebook", arquivo="ebooks/teste.pdf", _quantity=3)

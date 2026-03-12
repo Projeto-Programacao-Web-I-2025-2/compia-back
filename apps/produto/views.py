@@ -4,7 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
-from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -23,9 +22,7 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ["nome", "descricao"]
 
     def get_queryset(self):
-        queryset = Produto.objects.all().filter(
-            Q(livro__estoque__gt=0) | Q(ebook__arquivo__isnull=False)
-        ).order_by("-preco")
+        queryset = Produto.objects.all().order_by("-preco")
 
         tipo = self.request.query_params.get("tipo")
         if tipo == "livro":
