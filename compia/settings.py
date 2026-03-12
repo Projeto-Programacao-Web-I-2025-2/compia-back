@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = [
     "apps.cliente",
+    "apps.integracao",
     "apps.pedido",
     "apps.produto",
     "apps.user",
@@ -240,3 +241,6 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'default from email'
+
+MELHOR_ENVIO_TOKEN = os.getenv('MELHOR_ENVIO_TOKEN')
+MELHOR_ENVIO_URL = os.getenv('MELHOR_ENVIO_URL')
