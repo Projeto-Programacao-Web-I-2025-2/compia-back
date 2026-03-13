@@ -59,7 +59,7 @@ class ProdutoViewSet(viewsets.ReadOnlyModelViewSet):
         if not vendedor:
             return Response({"detail": "Vendedor não encontrado."}, status=status.HTTP_404_NOT_FOUND)
         produtos = Produto.objects.filter(vendedor=vendedor)
-        serializer = ProdutoSerializer(produtos, many=True)
+        serializer = ProdutoSerializer(produtos, many=True, context={"request": request})
         return Response(serializer.data)
 
 
