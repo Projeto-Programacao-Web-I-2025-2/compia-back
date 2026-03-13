@@ -35,7 +35,7 @@ class PedidoAdmin(admin.ModelAdmin):
     list_display = ("id", "cliente", "data_pedido", "frete", "total", "status")
     list_filter = ("status", "data_pedido")
     search_fields = ("cliente__nome",)
-    readonly_fields = ("cliente", "data_pedido", "frete", "total", "status")
+    readonly_fields = ("id", "cliente", "data_pedido", "data_entrega", "frete", "total", "status")
     fieldsets = (
         ("Informações gerais", {
             "fields": ("id", "cliente", "data_pedido", "data_entrega", "frete", "total", "status")
@@ -56,7 +56,7 @@ class PedidoAdmin(admin.ModelAdmin):
         return True
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return request.user.is_superuser
 
 
 admin.site.register(Pedido, PedidoAdmin)

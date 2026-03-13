@@ -28,6 +28,15 @@ class VendedorAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+    def has_module_permission(self, request):
+        return True
+
+    def has_view_permission(self, request, obj=None):
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
     def delete_model(self, request, obj):
         user = obj.user
         user.delete()
