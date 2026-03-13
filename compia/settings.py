@@ -184,6 +184,7 @@ JAZZMIN_SETTINGS = {
     "hide_apps": [
         "auth",
         "authtoken",
+        "django_apscheduler",
     ],
     "order_with_respect_to": [
         "dashboard",
