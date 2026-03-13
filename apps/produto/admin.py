@@ -124,7 +124,7 @@ class EbookAdmin(admin.ModelAdmin):
         return request.user.is_staff
 
     def has_add_permission(self, request):
-        return request.user.is_superuser
+        return False
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_staff

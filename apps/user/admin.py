@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
             "fields": ("nome", "email", "password1", "password2", "role"),
         }),
         ("Permissões", {
-            "fields": ("is_active", "is_staff", "is_superuser"),
+            "fields": ("is_staff", "is_superuser"),
         }),
     )
 
