@@ -7,5 +7,9 @@ class PedidoConfig(AppConfig):
 
     def ready(self):
         import apps.pedido.signals  # noqa: F401
-        from .scheduler import iniciar_scheduler
-        iniciar_scheduler()
+
+        from django.db import connection
+        tables = connection.introspection.table_names()
+        if 'django_apscheduler_djangojob' in tables:
+            from .scheduler import iniciar_scheduler
+            iniciar_scheduler()
