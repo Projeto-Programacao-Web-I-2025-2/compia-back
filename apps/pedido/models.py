@@ -76,4 +76,4 @@ class Pedido(models.Model):
     )
 
     def __str__(self):
-        return f"Pedido #{self.pk} - {self.get_status_display()}"
+        return f"Pedido #{self.pk}"
