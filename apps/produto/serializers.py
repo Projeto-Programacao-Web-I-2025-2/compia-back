@@ -7,10 +7,19 @@ class ProdutoSerializer(serializers.ModelSerializer):
     tipo = serializers.SerializerMethodField()
     estoque = serializers.SerializerMethodField()
     arquivo = serializers.SerializerMethodField()
+    imagem = serializers.SerializerMethodField()
 
     class Meta:
         model = Produto
         fields = "__all__"
+
+    def get_imagem(self, obj):
+        if not obj.imagem:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.imagem.url)
+        return obj.imagem.url
 
     def get_tipo(self, obj):
         if hasattr(obj, "livro"):
