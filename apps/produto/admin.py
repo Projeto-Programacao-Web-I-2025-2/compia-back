@@ -27,6 +27,10 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_display = ("nome", "produto", "preco")
     list_filter = ("categorias", "idioma", ProdutoTypeFilter)
     search_fields = ("nome",)
+    readonly_fields = (
+        "id", "nome", "preco", "idioma", "vendedor",
+        "descricao", "autor", "ano_lancamento", "imagem"
+    )
 
     def produto(self, obj):
         if hasattr(obj, "livro"):
