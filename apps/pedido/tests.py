@@ -188,7 +188,7 @@ class TestPedidoViewSet:
         assert response.data["total"] == "65.00"
 
     def test_create_pedido_status_aberto(self, api_client, client_user):
-        produto = baker.make("produto.Livro", preco=10.00)
+        produto = baker.make("produto.Livro", preco=10.00, estoque=5)
         api_client.force_authenticate(user=client_user)
         payload = {
             "frete": "10.00",
@@ -204,7 +204,7 @@ class TestPedidoViewSet:
         assert response.data["status"] == "ABERTO"
 
     def test_create_pedido_status_confirmado(self, api_client, client_user):
-        produto = baker.make("produto.Livro", preco=10.00)
+        produto = baker.make("produto.Livro", preco=10.00, estoque=5)
         api_client.force_authenticate(user=client_user)
         payload = {
             "frete": "10.00",
