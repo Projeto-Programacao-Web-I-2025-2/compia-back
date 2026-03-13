@@ -49,3 +49,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_backoffice(self):
         return self.role == self.Role.BACKOFFICE
+
+    def __str__(self):
+        return self.nome

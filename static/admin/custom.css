@@ -1,0 +1,12 @@
+/* static/admin/custom.css */
+.login-logo img {
+    max-height: 64px !important;
+    width: auto !important;
+    margin-bottom: 4px !important;
+}
+
+/* Muda a cor do username/email na sidebar do Jazzmin */
+.user-panel .info a, .user-panel .info span {
+    color: #ffffff !important; /* Escolha a cor desejada */
+    font-weight: bold;
+}

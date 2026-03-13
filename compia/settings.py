@@ -145,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -169,7 +170,11 @@ AUTH_USER_MODEL = "user.User"
 JAZZMIN_SETTINGS = {
     "site_title": "Compia",
     "site_header": "Compia",
-    "site_brand": "Compia",
+    "site_brand": "CompIA",
+    "login_logo": "logo-full.png",
+    "site_logo": "logo.png",
+    "site_icon": "favicon.ico",
+    "custom_css": "admin/custom.css",
     "welcome_sign": "Bem-vindo ao painel de administração da Compia",
     "copyright": "Compia",
     "show_ui_builder": False,
@@ -181,13 +186,13 @@ JAZZMIN_SETTINGS = {
     ],
     "order_with_respect_to": [
         "dashboard",
+        "pedido",
         "produto",
         "produto.Produto",
         "produto.Livro",
         "produto.Ebook",
         "cliente",
         "vendedor",
-        "pedido",
     ],
     "icons" : {
         "user.User": "fas fa-user",
@@ -233,8 +238,8 @@ JAZZMIN_UI_TWEAKS = {
     },
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
