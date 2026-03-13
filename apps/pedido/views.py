@@ -27,12 +27,12 @@ class PedidoViewSet(
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Pedido.objects.all().order_by("-data_pedido")
+            return Pedido.objects.all().order_by("-id")
         try:
             cliente = Cliente.objects.get(user=user)
         except Cliente.DoesNotExist:
             return Pedido.objects.none()
-        return Pedido.objects.filter(cliente=cliente).order_by("-data_pedido")
+        return Pedido.objects.filter(cliente=cliente).order_by("-id")
 
     @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsClientUser])
     def cancelar(self, request, pk=None):
