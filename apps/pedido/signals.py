@@ -49,7 +49,10 @@ def _enviar_email(instance):
     if attachments:
         params["attachments"] = attachments
 
-    resend.Emails.send(params)
+    try:
+        resend.Emails.send(params)
+    except Exception as e:
+        print(f"Erro ao enviar e-mail: {e}")
 
 
 @receiver(post_save, sender=Pedido)
