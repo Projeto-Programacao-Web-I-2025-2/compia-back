@@ -1,4 +1,7 @@
+import os
+import requests as http_requests
 import threading
+
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -28,16 +31,15 @@ def _enviar_email(instance):
         produto = item.produto
         if hasattr(produto, "ebook") and produto.ebook.arquivo:
             arquivo_ebook = produto.ebook.arquivo
-            content_type = (
-                arquivo_ebook.file.content_type
-                if hasattr(arquivo_ebook.file, "content_type")
-                else "application/octet-stream"
-            )
-            email.attach(
-                arquivo_ebook.name,
-                arquivo_ebook.read(),
-                content_type
-            )
+            try:
+                url = arquivo_ebook.url
+                response = http_requests.get(url)
+                response.raise_for_status()
+                content_type = response.headers.get("Content-Type", "application/octet-stream")
+                nome_arquivo = os.path.basename(arquivo_ebook.name)
+                email.attach(nome_arquivo, response.content, content_type)
+            except Exception as e:
+                print(f"Erro ao anexar ebook: {e}")
 
     email.send()
 
