@@ -19,7 +19,7 @@ def _enviar_email(instance):
     email = EmailMultiAlternatives(
         subject="Pedido confirmado!",
         body=text_content,
-        from_email="erikdinizbeserra@gmail.com",
+        from_email="compia.no.reply@gmail.com",
         to=[instance.cliente.user.email],
     )
     email.attach_alternative(html_content, "text/html")
